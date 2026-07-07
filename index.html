@@ -1,333 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Local Health Directory Prototype</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-        body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            margin: 0;
-            padding: 40px 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
 
-        /* 🚨 GLOBAL CRISIS NOTICE GUARDRAIL */
-        .crisis-banner {
-            background-color: #fef2f2;
-            border-left: 4px solid #ef4444;
-            padding: 16px;
-            margin-bottom: 32px;
-            border-radius: 4px;
-        }
-        .crisis-banner h4 {
-            margin: 0 0 4px 0;
-            color: #991b1b;
-            font-size: 16px;
-        }
-        .crisis-banner p {
-            margin: 0;
-            font-size: 14px;
-            color: #7f1d1d;
-            line-height: 1.4;
-        }
-
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-            color: #0f172a;
-            text-transform: capitalize;
-        }
-        header p {
-            color: #64748b;
-            margin: 0 0 32px 0;
-            font-size: 16px;
-        }
-
-        /* DIRECTORY MATRIX LOOP */
-        .directory-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .card {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            position: relative;
-        }
-        .rank-tag {
-            font-size: 12px;
-            font-weight: 700;
-            color: #2563eb;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        .facility-name {
-            margin: 8px 0 12px 0;
-            font-size: 22px;
-            color: #1e293b;
-        }
-        .meta-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            font-size: 14px;
-            color: #475569;
-            margin-bottom: 20px;
-        }
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* THE MONETIZATION BUTTONS */
-        .cta-btn {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .cta-btn:hover {
-            background-color: #1d4ed8;
-        }
-        .unclaimed-text {
-            font-size: 13px;
-            color: #94a3b8;
-            font-style: italic;
-            border-top: 1px dashed #e2e8f0;
-            padding-top: 12px;
-        }
-
-        /* MODAL REFERRAL WIDGET BACKGROUND */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(4px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .modal {
-            background: white;
-            padding: 32px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        }
-        .modal h3 {
-            margin: 0 0 8px 0;
-            font-size: 20px;
-        }
-        .modal p {
-            font-size: 13px;
-            color: #64748b;
-            line-height: 1.5;
-            margin-bottom: 24px;
-        }
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-        .modal-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-top: 24px;
-        }
-        .cancel-btn {
-            background: #f1f5f9;
-            color: #475569;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .submit-btn {
-            background: #2563eb;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="container">
-    
-    <!-- 🚨 STATIC DISCLAIMER LAYER -->
+
     <div class="crisis-banner">
         <h4>🚨 EMERGENCY NOTICE</h4>
-        <p>If you or a loved one are experiencing a psychiatric crisis or medical emergency, please dial or text <strong>988</strong> immediately. This platform operates as a data-driven reputation index and does not monitor real-time bed capacity or medical staffing variables.</p>
+        <p>
+            If you or a loved one are experiencing a psychiatric crisis or medical emergency,
+            please dial or text <strong>988</strong> immediately. This platform operates as a
+            data-driven reputation index and does not monitor real-time bed capacity or
+            medical staffing variables.
+        </p>
     </div>
 
     <header>
         <h1 id="directory-title">Top Behavioral Health Options</h1>
-        <p id="directory-subtitle">Independent Data Analysis for Allen County / Greater Fort Wayne</p>
+        <p id="directory-subtitle">
+            Independent Data Analysis for Allen County / Greater Fort Wayne
+        </p>
     </header>
 
-    <!-- CONTAINER WHERE THE JAVASCRIPT WILL INJECT CARDS -->
     <div class="directory-list" id="directory-container"></div>
+
 </div>
 
-<!-- SECURE DATA PASSING MODAL COMPONENT -->
+
 <div class="modal-overlay" id="intake-modal">
+
     <div class="modal">
+
         <h3 id="modal-facility-title">Secure Admission Inquiries</h3>
-        <p>Your verification parameters will be packaged and transmitted using zero-knowledge end-to-end encryption directly to the facility admissions team.</p>
-        
+
+        <p>
+            Your verification parameters will be packaged and transmitted using
+            zero-knowledge end-to-end encryption directly to the facility admissions team.
+        </p>
+
         <form id="intake-form">
+
             <div class="form-group">
                 <label for="patient-name">Patient Full Name</label>
-                <input type="text" id="patient-name" required placeholder="John Doe">
+                <input
+                    type="text"
+                    id="patient-name"
+                    required
+                    placeholder="John Doe">
             </div>
+
             <div class="form-group">
                 <label for="insurance-id">Anthem Member ID Number</label>
-                <input type="text" id="insurance-id" required placeholder="XYZ123456789">
+                <input
+                    type="text"
+                    id="insurance-id"
+                    required
+                    placeholder="XYZ123456789">
             </div>
+
             <div class="form-group">
                 <label for="callback-phone">Secure Contact Callback Phone</label>
-                <input type="tel" id="callback-phone" required placeholder="(260) 555-0199">
+                <input
+                    type="tel"
+                    id="callback-phone"
+                    required
+                    placeholder="(260) 555-0199">
             </div>
+
             <div class="modal-actions">
-                <button type="button" class="cancel-btn" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="submit-btn">Submit Secured Request</button>
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()">
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="submit-btn">
+                    Submit Secured Request
+                </button>
+
             </div>
+
         </form>
+
     </div>
+
 </div>
 
-<script>
-    // 1. Mocking a relational database response matching our programmatic conditions
-    const mockProviders = [
-        {
-            id: 101,
-            name: "Parkview Behavioral Health Institute",
-            score: 4.88,
-            reviews: 142,
-            insurance: "Anthem PPO In-Network",
-            hasActiveReferralTier: true // <-- Renders the software booking widget
-        },
-        {
-            id: 102,
-            name: "Maple Heights Behavioral Health",
-            score: 4.45,
-            reviews: 68,
-            insurance: "Anthem PPO In-Network",
-            hasActiveReferralTier: false // <-- Omit the widget, forces clean data display only
-        },
-        {
-            id: 103,
-            name: "Allendale Treatment & Crisis Stabilization",
-            score: 4.12,
-            reviews: 29,
-            insurance: "Anthem PPO In-Network",
-            hasActiveReferralTier: false
-        }
-    ];
-
-    let targetedFacilityId = null;
-
-    // 2. Render Loop Processor
-    function renderDirectory() {
-        const container = document.getElementById('directory-container');
-        container.innerHTML = ''; // Clear DOM state
-
-        mockProviders.forEach((provider, index) => {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            // Check configuration layer to decide which UI layout block to mount
-            const interactionBlock = provider.hasActiveReferralTier 
-                ? `<button class="cta-btn" onclick="openModal(${provider.id}, '${provider.name}')">Verify Benefits & Request Placement</button>`
-                : `<div class="unclaimed-text">Unclaimed Profile. Contact this facility directly to check current structural bed availability metrics.</div>`;
-
-            card.innerHTML = `
-                <div class="rank-tag">Platform Quality Rank #${index + 1}</div>
-                <h2 class="facility-name">${provider.name}</h2>
-                <div class="meta-row">
-                    <div class="meta-item">★ <strong>${provider.score}</strong> Score</div>
-                    <div class="meta-item">• ${provider.reviews} Verified Reviews</div>
-                    <div class="meta-item">✔ ${provider.insurance}</div>
-                </div>
-                ${interactionBlock}
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    // 3. UI State Interactions
-    function openModal(id, name) {
-        targetedFacilityId = id;
-        document.getElementById('modal-facility-title').innerText = `Secure Referral: ${name}`;
-        document.getElementById('intake-modal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('intake-modal').style.display = 'none';
-        document.getElementById('intake-form').reset();
-        targetedFacilityId = null;
-    }
-
-    // 4. Form Pipeline Event Handler
-    document.getElementById('intake-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const payload = {
-            facilityId: targetedFacilityId,
-            patientName: document.getElementById('patient-name').value,
-            insuranceId: document.getElementById('insurance-id').value,
-            phone: document.getElementById('callback-phone').value
-        };
-
-        // Visual confirmation mimicking backend processing execution
-        alert(`SUCCESS:\nSecure package successfully routed to database pipelines for processing.\n\nTarget Facility ID: ${payload.facilityId}\nPatient: ${payload.patientName}\nRouting endpoint firing...`);
-        
-        closeModal();
-    });
-
-    // Run the engine loop on window load initialization
-    window.onload = renderDirectory;
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
